@@ -1,0 +1,8 @@
+А: firstAccount@mail.ru
+П: 1stAccPass
+
+А: secondAccount@gmail.com
+П: 2ndAccPass
+
+А: thirdAccount@bk.ru
+П: 3rdAccPass
