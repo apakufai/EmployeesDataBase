@@ -192,7 +192,8 @@ public class AddMenu {
                 return "cancel";
             }
 
-            isBossCorrect = (bossInput.equals(bossInput.replaceAll("[^- А-ЯЁа-яё]", ""))); // проверка
+            // Вписана отдельная проверка, т.к. в методе "correctName" отсутствует проверка на пробел
+            isBossCorrect = (bossInput.equals(bossInput.replaceAll("[^- А-ЯЁа-яё]", "")));
 
             if (!isBossCorrect) {
                 System.out.println("Некорректный ввод!");
@@ -254,8 +255,12 @@ public class AddMenu {
                 return "cancel";
             } // Для выхода из меню
 
+            if (!inputPhone.startsWith("+7") && !inputPhone.startsWith("8") ) {
+                System.out.println("Ошибка! телефон должен начинаться с числа +7 или 8!");
+                continue;
+            }
+
             if (!Checks.correctPhone(inputPhone)) {
-                System.out.println("Некорректный ввод!");
                 continue;
             }
 
@@ -372,7 +377,6 @@ public class AddMenu {
             }
 
             if (input.equals("отмена")) {
-                isDateCorrect = true;
                 return LocalDate.of(1, 1, 1);
             } // Сопровождающая строка для отмены операции
 

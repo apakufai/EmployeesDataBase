@@ -766,6 +766,7 @@ public class Employee {
                         isChangingCompleted = true;
                         System.out.println("\nИзменение данных сотрудника успешно завершено");
                     }
+                    default -> System.out.println("Некорректный ввод!");
                 }
             } while (!operation.equals("сохр"));
         } while (!isChangingCompleted);
