@@ -14,6 +14,7 @@ public class Account {
         return currentPasswordHash;
     }
 
+    // Проверка наличия аккаунта в файле "Accounts.txt"
     public static void checkAccounts(String inputAccount) {
 
         try {
@@ -38,6 +39,6 @@ public class Account {
             System.out.println("Такого логина нет в базе!");
         }
 
-    } // Проверка наличия аккаунта в файле "Accounts.txt"
+    }
 
 }

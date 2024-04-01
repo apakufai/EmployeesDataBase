@@ -1,5 +1,6 @@
 public class Checks {
 
+    // Метод для проверки правильного ввода строк
     public static boolean correctName(String input) {
         if (input.equals(input.replaceAll("[^-А-ЯЁа-яё]", ""))) {
             return true;
@@ -7,8 +8,9 @@ public class Checks {
             System.out.println("Некорректный ввод!");
             return false;
         }
-    } // Метод для проверки правильного ввода строк
+    }
 
+    // Метод для проверки правильного ввода чисел
     public static boolean correctNumber(String input) {
         if (input.equals(input.replaceAll("[^0-9]", ""))) {
             return true;
@@ -16,8 +18,9 @@ public class Checks {
             System.out.println("Некорректный ввод!");
             return false;
         }
-    } // Метод для проверки правильного ввода чисел
+    }
 
+    // Метод для проверки правильного ввода дат (через точку)
     public static boolean correctDate(String input) {
         if (input.equals(input.replaceAll("[^0-9.]", ""))) {
             return true;
@@ -25,8 +28,9 @@ public class Checks {
             System.out.println("Некорректный ввод!");
             return false;
         }
-    } // Метод для проверки правильного ввода даты
+    }
 
+    // Метод для проверки правильного ввода номера телефона
     public static boolean correctPhone(String input) {
         if (input.equals(input.replaceAll("[^0-9-+() ]", ""))) {
             return true;
@@ -34,8 +38,9 @@ public class Checks {
             System.out.println("Некорректный ввод!");
             return false;
         }
-    } // Метод для проверки правильного ввода номера телефона
+    }
 
+    // Метод, делающий первую букву заглавной, а остальные - строчными
     public static String correctInputCase(String str) {
 
         String firstLetter = String.valueOf(new StringBuffer(str)
@@ -45,6 +50,6 @@ public class Checks {
                 .replace(0, 1, firstLetter)); // Слияние первой буквы и конца строки
 
         return str;
-    } // Метод, делающий первую букву заглавной, а остальные - строчными
+    }
 
 }

@@ -1,14 +1,11 @@
 import java.io.*;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.ArrayList;
-import java.util.UUID;
-
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Employee {
 
-    public static TreeSet<Employee> employees = new TreeSet<>(Comparators.mainComparator); // Сотрудники
-
+    // Сотрудники
+    public static TreeSet<Employee> employees = new TreeSet<>(Comparators.mainComparator);
     private String fullName;
     private String birthday;
     private Sex sex;
@@ -20,7 +17,7 @@ public class Employee {
     private int salary;
     private final String id;
 
-    // ГЕТТЕРЫ
+                                            // Геттеры
     public String getFullName() {
         return fullName;
     }
@@ -29,20 +26,23 @@ public class Employee {
         return birthday;
     }
 
+    // Возвращение года рождения сотрудника в Integer для компаратора
     public int getYearOfBirth() {
         String[] fullDate = birthday.split("\\.");
         return Integer.parseInt(fullDate[2]);
-    } // Возвращение года рождения сотрудника в Integer для компаратора
+    }
 
+    // Возвращение месяца рождения сотрудника в Integer для компаратора
     public int getMonthOfBirth() {
         String[] fullDate = birthday.split("\\.");
         return Integer.parseInt(fullDate[1]);
-    } // Возвращение месяца рождения сотрудника в Integer для компаратора
+    }
 
+    // Возвращение дня рождения сотрудника в Integer для компаратора
     public int getDayOfBirth() {
         String[] fullDate = birthday.split("\\.");
         return Integer.parseInt(fullDate[0]);
-    } // Возвращение дня рождения сотрудника в Integer для компаратора
+    }
 
     public String getSex() {
         return sex.getSex();
@@ -80,16 +80,19 @@ public class Employee {
         return employmentDate;
     }
 
+    // Возвращение года найма сотрудника в Integer для компаратора
     public int getYearOfEmploymentDate() {
         String[] fullDate = employmentDate.split("\\.");
         return Integer.parseInt(fullDate[2]);
     }
 
+    // Возвращение месяца найма сотрудника в Integer для компаратора
     public int getMonthOfEmploymentDate() {
         String[] fullDate = employmentDate.split("\\.");
         return Integer.parseInt(fullDate[1]);
     }
 
+    // Возвращение дня найма сотрудника в Integer для компаратора
     public int getDayOfEmploymentDate() {
         String[] fullDate = employmentDate.split("\\.");
         return Integer.parseInt(fullDate[0]);
@@ -104,7 +107,7 @@ public class Employee {
     }
 
 
-    // Конструктор
+                                            // Конструктор
     public Employee(String fullName, String birthday, Sex sex, String phone, Position position, Department department,
                     String boss, String employmentDate, int salary, String id) {
         this.fullName = fullName;
@@ -120,19 +123,33 @@ public class Employee {
     }
 
 
-    // Методы
+                                            // Методы
+
+    // Метод, выводящий ФИО, должность, отдел, начальника (если он есть) и айдишника
     public void printInfoSimple() {
         System.out.println(fullName + "; " + position.getPosition() + "; " + department.getDepartment() + "; " +
                 boss + "; " + id);
-    } // Печать поисковой информации о сотрудниках
+    }
 
+    // Метод, выводящий полную информацию о сотруднике
     public void printInfoAll() {
         System.out.println("ФИО: " + fullName + "\nДата рождения: " + birthday + "\nПол: " + sex.getSex() +
                 "\nТелефон: " + phone + "\nДолжность: " + position.getPosition() +
                 "\nОтдел: " + department.getDepartment() + "\nНачальник: " + boss + "\nДата найма: " + employmentDate +
                 "\nЗарплата: " + salary + "\nID: " + id);
-    } // Печать полной информации о сотрудниках
+    }
 
+    // Метод, выводящий среднюю зарплату
+    private static void printAverageSalary(List<Employee> employeeList, String dept) {
+        Optional<Integer> salaryOfAll = employeeList.stream()
+                .map(Employee::getSalary)
+                .reduce(Integer::sum);
+        double totalSalary = salaryOfAll.orElse(0);
+        double averageSalary = totalSalary / employeeList.size();
+        System.out.println(dept + (Math.round(averageSalary * 100.0) / 100.0));
+    }
+
+    // Запрос на вывод информации о компании
     public static void printCompanyReport() {
 
         String report;
@@ -156,11 +173,13 @@ public class Employee {
 
                 case ("нач") -> {
 
-                    List<Employee> salesDept = new ArrayList<>(); // Сотрудники отдела продаж
-                    List<Employee> developmentDept = new ArrayList<>(); // Сотрудники отдела разработок
-                    List<Employee> directorateDept = new ArrayList<>(); // Сотрудники совета директоров
-                    List<Employee> outsource = new ArrayList<>(); // Вольнонаёмные сотрудники
+                    // Списки сотрудников по отделам
+                    List<Employee> salesDept = new ArrayList<>();
+                    List<Employee> developmentDept = new ArrayList<>();
+                    List<Employee> directorateDept = new ArrayList<>();
+                    List<Employee> outsource = new ArrayList<>();
 
+                    // Добавление сотрудников в списки
                     for (Employee emp : employees) {
                         Department dept = emp.getDepartmentENUM();
                         switch (dept) {
@@ -169,7 +188,7 @@ public class Employee {
                             case DIRECTORATE -> directorateDept.add(emp);
                             case OUTSOURCING -> outsource.add(emp);
                         }
-                    } // Добавление сотрудников в списки
+                    }
 
                     System.out.println(); // Косметический отступ
 
@@ -193,78 +212,20 @@ public class Employee {
 
                 case ("зп") -> {
 
-                    List<Employee> salesDept = new ArrayList<>(); // Сотрудники отдела продаж
-                    List<Employee> developmentDept = new ArrayList<>(); // Сотрудники отдела разработок
-                    List<Employee> directorateDept = new ArrayList<>(); // Сотрудники совета директоров
-                    List<Employee> outsource = new ArrayList<>(); // Вольнонаёмные сотрудники
-
-                    double salesSalary = 0; // Счётчик зарплаты отдела продаж
-                    double developmentSalary = 0; // Счётчик зарплаты отдела разработок
-                    double directorateSalary = 0; // Счётчик зарплаты совета директоров
-                    double outsourceSalary = 0; // Счётчик зарплаты вольнонаёмных сотрудников
-                    double totalSalary = 0; // Счётчик общей зарплаты
-
-                    int salersCount = 0; // Счётчик сотрудников отдела продаж
-                    int developersCount = 0; // Счётчик сотрудников отдела разработок
-                    int directorsCount = 0; // Счётчик сотрудников совета директоров
-                    int outsourcesCount = 0; // Счётчик вольнонаёмных сотрудников
-                    int allEmployeesCount = 0; // Счётчик сотрудников по всей компании
-
-                    for (Employee emp : employees) {
-
-                        totalSalary += emp.getSalary(); // Счётчик общей зарплаты
-                        allEmployeesCount++; // Счётчик сотрудников
-
-                        Department dept = emp.getDepartmentENUM();
-
-                        switch (dept) {
-
-                            case SALES -> {
-                                salesDept.add(emp);
-                                salesSalary += emp.getSalary();
-                                salersCount++;
-                            }
-
-                            case DEVELOPMENT -> {
-                                developmentDept.add(emp);
-                                developmentSalary += emp.getSalary();
-                                developersCount++;
-                            }
-
-                            case DIRECTORATE -> {
-                                directorateDept.add(emp);
-                                directorateSalary += emp.getSalary();
-                                directorsCount++;
-                            }
-
-                            case OUTSOURCING -> {
-                                outsource.add(emp);
-                                outsourceSalary += emp.getSalary();
-                                outsourcesCount++;
-                            }
-
-                        }
-
-                    } // Добавление сотрудников в списки и заполнение счётчиков
-
-                    double averageFullSalary = totalSalary / allEmployeesCount; // Средняя зарплата по компании
-                    double averageSalesSalary = salesSalary / salersCount; // Средняя зарплата по компании
-                    double averageDevelopmentSalary = developmentSalary / developersCount; // Средняя зарплата по компании
-                    double averageDirectorateSalary = directorateSalary / directorsCount; // Средняя зарплата по компании
-                    double averageOutsourceSalary = outsourceSalary / outsourcesCount; // Средняя зарплата по компании
-
                     System.out.println(); // Косметический отступ
 
-                    System.out.println("Средняя зарплата по компании: " +
-                            (Math.round(averageFullSalary * 100.0) / 100.0));
-                    System.out.println("Средняя зарплата по отделу продаж: " +
-                            (Math.round(averageSalesSalary * 100.0) / 100.0));
-                    System.out.println("Средняя зарплата по отделу разработок: " +
-                            (Math.round(averageDevelopmentSalary * 100.0) / 100.0));
-                    System.out.println("Средняя зарплата совета директоров: " +
-                            (Math.round(averageDirectorateSalary * 100.0) / 100.0));
-                    System.out.println("Средняя зарплата вольнонаёмных сотрудников: " +
-                            (Math.round(averageOutsourceSalary * 100.0) / 100.0));
+                    // Сортировка отделов по группам
+                    Map<Department, List<Employee>> employeesByDept = employees
+                            .stream()
+                            .collect(Collectors.groupingBy(Employee::getDepartmentENUM));
+
+                    // Вывод средней зарплаты каждого из отделов
+                    for (Map.Entry<Department, List<Employee>> item : employeesByDept.entrySet()) {
+                        printAverageSalary(item.getValue(), item.getKey().getDepartment() + " с его средней зарплатой: ");
+                    }
+
+                    // Вывод общей средней зарплаты
+                    printAverageSalary(employees.stream().toList(), "Общая средняя зарплата: ");
 
                     isReportCorrect = true;
 
@@ -273,12 +234,12 @@ public class Employee {
                 case ("плата") -> {
 
                     List<Employee> maxSalary = new ArrayList<>(employees);
+
+                    // Сортировка зарплаты по компаратору
                     maxSalary.sort(Comparators.highestSalaryEmployeeComparator.reversed());
 
                     try {
-
                         System.out.println(); // Косметический отступ
-
                         for (int i = 0; i < 10; i++) {
                             System.out.println(maxSalary.get(i).getFullName() + "; " +
                                     maxSalary.get(i).getSalary() + "; " +
@@ -322,8 +283,9 @@ public class Employee {
 
         } while (!isReportCorrect);
 
-    } // Запрос на вывод информации о компании
+    }
 
+    // Загрузка сотрудников из файла в TreeSet программы
     public static void addEmployees() {
 
         try {
@@ -385,7 +347,7 @@ public class Employee {
                     if (line.contains("Совет директоров")) {
                         department = Department.DIRECTORATE;
                     }
-                    if (line.contains("Вольнонаёмный")) {
+                    if (line.contains("Вольный найм")) {
                         department = Department.OUTSOURCING;
                     }
                 }
@@ -425,8 +387,9 @@ public class Employee {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    } // Загрузка сотрудников из файла в TreeSet программы
+    }
 
+    // Добавление нового сотрудника
     public static void newEmployee() {
 
         System.out.println("\nЧтобы выйти из меню добавления, введите \"Отмена\"");
@@ -509,9 +472,10 @@ public class Employee {
                 continue;
             }
 
-            id = UUID.randomUUID().toString().substring(0, 8); // Добавление рандомного айдишника (16-теричная система, 8 символов)
+            // Добавление рандомного айдишника (16-теричная система, 8 символов)
+            id = UUID.randomUUID().toString().substring(0, 8);
 
-            System.out.println("\nID СОТРУДНИКА: " + id); // Проверка, можно удалить
+            System.out.println("\nID СОТРУДНИКА: " + id);
 
             employees.add(new Employee(fullName, birthday, sex, phone, position, department, boss, employmentDate, salary, id));
             System.out.println("\nСотрудник " + fullName + " успешно добавлен");
@@ -519,12 +483,13 @@ public class Employee {
 
         }
 
-    } // Добавление нового сотрудника
+    }
 
+    // Перезапись данных их программы в файл "Employees.txt"
     public static void saveChangesInFile() {
 
         try {
-            PrintWriter writer = new PrintWriter(new FileWriter("Employees.txt")); // Объявление буферизированной перезаписи
+            PrintWriter writer = new PrintWriter(new FileWriter("Employees.txt"));
 
             for (Employee emp : employees) {
                 writer.write("ФИО: " + emp.getFullName() + "\r");
@@ -539,16 +504,18 @@ public class Employee {
                 writer.write("ID: " + emp.getId() + "\r");
                 writer.write("__________\r\r");
             }
-            writer.close(); // Закрытие потока записи
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("\nИзменения сохранены");
-    } // Перезапись данных их программы в файл "Employees.txt"
+    }
 
+    // Поиск сотрудника по определённому параметру
     public static void findAndPrintEmployee() {
 
-        boolean correctInput = false; // Проверка на корректный ввод запроса
+        // Проверка на корректный ввод запроса
+        boolean correctInput = false;
 
         System.out.println("\nЧтобы выйти из меню поиска, введите \"Отмена\"");
         System.out.println("Для поиска по Ф/И/О введите \"Имя\"");
@@ -558,13 +525,14 @@ public class Employee {
 
         do {
             System.out.print("\nВведите критерий поиска: ");
-            String searchTypeInput = Main.sc.nextLine().toLowerCase(); // Ввод критерия
+            String searchTypeInput = Main.sc.nextLine().toLowerCase();
 
             switch (searchTypeInput) {
 
+                // Строка для отмены операции
                 case ("отмена") -> {
                     return;
-                } // Для выхода из меню
+                }
 
                 case ("имя") -> {
 
@@ -680,8 +648,9 @@ public class Employee {
                 default -> System.out.println("\nНекорректный ввод!");
             }
         } while (!correctInput);
-    } // Поиск сотрудника по определённому параметру
+    }
 
+    // Изменение данных сотрудника (кроме id) по id
     public static void changeEmployee() {
 
         boolean isChangingCompleted = false;
@@ -700,6 +669,7 @@ public class Employee {
             Employee employeeToCorrect = null;
             String currentId = null;
 
+            // Цикл для проверки наличия ID и активации меню изменения, если айдишник есть в базе
             for (Employee emp : employees) {
                 if (emp.getId().equals(idInput)) {
                     isIdInBase = true;
@@ -707,8 +677,9 @@ public class Employee {
                     currentId = emp.getId();
                     System.out.println("\nВыбран сотрудник " + emp.getFullName() + ", " + emp.getPosition() + ", "
                             + emp.getBirthday() + " г.р.");
+                    break;
                 }
-            } // Цикл для проверки наличия ID и активации меню изменения, если айдишник есть в базе
+            }
 
             if (!isIdInBase) {
                 System.out.println("ID не найдено!");
@@ -770,8 +741,9 @@ public class Employee {
                 }
             } while (!operation.equals("сохр"));
         } while (!isChangingCompleted);
-    } // Изменение сотрудника по id
+    }
 
+    // Удаление сотрудника по id
     public static void removeEmployee() {
 
         boolean isDeletingCompleted = false;
@@ -811,21 +783,26 @@ public class Employee {
             String confirmation = Main.sc.nextLine();
 
             switch (confirmation) {
+
                 case ("отмена") -> {
                     return;
                 }
+
                 case ("+") -> {
                     employees.remove(employeeToDelete);
                     isDeletingCompleted = true;
                     System.out.println("\nУдаление сотрудника успешно завершено");
                 }
+
+                // Пропуск цикла, удаление сотрудника не производится
                 case ("-") -> {
-                    // Пропуск цикла, удаление сотрудника не производится
                 }
+
                 default -> System.out.println("Некорректный ввод!");
             }
 
         } while (!isDeletingCompleted);
-    } // Удаление сотрудника по id
+
+    }
 
 }

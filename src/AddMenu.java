@@ -3,6 +3,7 @@ import java.time.format.DateTimeParseException;
 
 public class AddMenu {
 
+    // Ввод имени
     public static String enterFullName() {
 
         String nameInput;
@@ -14,42 +15,48 @@ public class AddMenu {
 
         nameInput = inputNameSurnamePatronymic("имя");
 
+        // Строка для отмены операции
         if (nameInput.equals("cancel")) {
             return "cancel";
-        } // Строка для отмены операции
+        }
 
         System.out.println(); // Косметический отступ
 
         surnameInput = inputNameSurnamePatronymic("фамилию");
 
+        // Строка для отмены операции
         if (surnameInput.equals("cancel")) {
             return "cancel";
-        } // Строка для отмены операции
+        }
 
         System.out.println(); // Косметический отступ
 
         patronymicInput = inputNameSurnamePatronymic("отчество");
 
+        // Строка для отмены операции
         if (patronymicInput.equals("cancel")) {
             return "cancel";
-        } // Строка для отмены операции
+        }
 
+        // Полное имя сотрудника
         fullName = Checks.correctInputCase(surnameInput) + " " + Checks.correctInputCase(nameInput)
-                + patronymicInput; // ПОЛНОЕ ИМЯ СОТРУДНИКА
+                + patronymicInput;
         /* Здесь пробел между фамилией и отчеством не ставится, т.к. не у всех людей оно есть.
         При наличии отчества пробел сразу вписывается в строку отчества, после чего происходит общая конкатенация
         */ // Комментарий к коду
 
-        System.out.println("\nФИО СОТРУДНИКА: " + fullName); // Проверка, можно удалить
+        System.out.println("\nФИО СОТРУДНИКА: " + fullName);
 
         return fullName;
 
-    } // Ввод имени
+    }
 
+    // Ввод пола
     public static Sex enterSex() {
 
         System.out.println(); // Косметический отступ
 
+        // Пол, значение по умолчанию - строка "null"
         Sex sex = Sex.EMPTY;
 
         do {
@@ -67,12 +74,13 @@ public class AddMenu {
 
         } while (sex == Sex.EMPTY);
 
-        System.out.println("\nПОЛ СОТРУДНИКА: " + sex.getSex()); // Проверка, можно удалить
+        System.out.println("\nПОЛ СОТРУДНИКА: " + sex.getSex());
 
         return sex;
 
-    } // Ввод пола
+    }
 
+    // Ввод даты рождения
     public static String enterBirthday() {
 
         System.out.println(); // Косметический отступ
@@ -85,9 +93,10 @@ public class AddMenu {
 
             LocalDate dateOfBirthday = inputDate("день рождения");
 
+            // Строка для отмены операции
             if (dateOfBirthday.isEqual(LocalDate.of(1, 1, 1))) {
                 return "cancel";
-            } // Сопровождающая строка для отмены операции
+            }
 
             // Границы года вводятся вручную! Раньше 16-ти на работу не берут по закону, после 100 обычно не работают
             if (dateOfBirthday.plusYears(16).isAfter(LocalDate.now()) ||
@@ -104,23 +113,24 @@ public class AddMenu {
 
         } while (!isDateCorrect);
 
-        System.out.println("\nДАТА РОЖДЕНИЯ СОТРУДНИКА: " + birthday); // Проверка, можно удалить
+        System.out.println("\nДАТА РОЖДЕНИЯ СОТРУДНИКА: " + birthday);
 
         return birthday;
 
-    } // Ввод даты рождения
+    }
 
+    // Ввод должности
     public static Position enterPosition() {
 
         System.out.println(); // Косметический отступ
 
-        Position position = Position.EMPTY; // Должность, значение по умолчанию - строка "null"
+        // Должность, значение по умолчанию - строка "null"
+        Position position = Position.EMPTY;
 
         // Проверка на корректность ввода строки должности
-
         do {
             System.out.print("Введите должность сотрудника: ");
-            String positionInput = Main.sc.nextLine().toLowerCase(); // Ввод должности
+            String positionInput = Main.sc.nextLine().toLowerCase();
 
             switch (positionInput) {
                 case ("") -> System.out.println("Строка ввода пустая!");
@@ -135,21 +145,23 @@ public class AddMenu {
 
         } while (position == Position.EMPTY);
 
-        System.out.println("\nДОЛЖНОСТЬ СОТРУДНИКА: " + position.getPosition()); // Проверка, можно удалить
+        System.out.println("\nДОЛЖНОСТЬ СОТРУДНИКА: " + position.getPosition());
 
         return position;
 
-    } // Ввод должности
+    }
 
+    // Ввод отдела
     public static Department enterDepartment() {
 
         System.out.println(); // Косметический отступ
 
-        Department department = Department.EMPTY; // Отдел
+        // Отдел, значение по умолчанию - строка "null"
+        Department department = Department.EMPTY;
 
         do {
             System.out.print("Введите отдел (если его нет, введите \"-\"): ");
-            String departmentInput = Main.sc.nextLine().toLowerCase(); // Ввод должности
+            String departmentInput = Main.sc.nextLine().toLowerCase();
             switch (departmentInput) {
                 case ("") -> System.out.println("Строка ввода пустая!");
                 case ("отмена") -> {
@@ -164,30 +176,36 @@ public class AddMenu {
 
         } while (department == Department.EMPTY);
 
-        System.out.println("\nОТДЕЛ СОТРУДНИКА: " + department.getDepartment()); // Проверка, можно удалить
+        System.out.println("\nОТДЕЛ СОТРУДНИКА: " + department.getDepartment());
 
         return department;
 
-    } // Ввод отдела
+    }
 
+    // Ввод начальника
+        /* Здесь начальник для каждого человека вводится вручную. В классе "Department" за каждым ENUM
+        закреплён департамент и начальник этого департамента. Не факт, что начальник отдела, в котором
+        работает человек, будет непосредственным начальником этого человека.
+        */ // Комментарий к блоку
     public static String enterBoss() {
 
         System.out.println(); // Косметический отступ
 
-        String boss = ""; // Начальник
+        String boss = "";
 
-        boolean isBossCorrect; // Проверка на правильность строки ввода босса
-        boolean isBossChanged = false; // Выбран ли начальник?
+        boolean isBossCorrect;
+        boolean isBossChanged = false;
 
         do {
             System.out.print("Введите имя и фамилию начальника сотрудника (если его нет, введите \"-\"): ");
-            String bossInput = Main.sc.nextLine().toLowerCase(); // Ввод кода города
+            String bossInput = Main.sc.nextLine().toLowerCase();
 
             if (bossInput.equals("")) {
                 System.out.println("Строка ввода пустая!");
                 continue;
             }
 
+            // Строка для отмены операции
             if (bossInput.equals("отмена")) {
                 return "cancel";
             }
@@ -222,16 +240,13 @@ public class AddMenu {
 
         } while (!isBossChanged);
 
-        System.out.println("\nНАЧАЛЬНИК СОТРУДНИКА: " + boss); // Проверка, можно удалить
+        System.out.println("\nНАЧАЛЬНИК СОТРУДНИКА: " + boss);
 
         return boss;
 
-    } // Ввод начальника
-        /* Здесь начальник для каждого человека вводится вручную. В классе "Department" за каждым ENUM
-        закреплён департамент и начальник этого департамента. Не факт, что начальник отдела, в котором
-        работает человек, будет непосредственным начальником этого человека.
-        */ // Комментарий к блоку
+    }
 
+    // Ввод телефона
     public static String enterPhone() {
 
         String inputPhone;
@@ -251,11 +266,12 @@ public class AddMenu {
                 continue;
             }
 
+            // Строка для отмены операции
             if (inputPhone.equals("отмена")) {
                 return "cancel";
-            } // Для выхода из меню
+            }
 
-            if (!inputPhone.startsWith("+7") && !inputPhone.startsWith("8") ) {
+            if (!inputPhone.startsWith("+7") && !inputPhone.startsWith("8")) {
                 System.out.println("Ошибка! телефон должен начинаться с числа +7 или 8!");
                 continue;
             }
@@ -264,10 +280,11 @@ public class AddMenu {
                 continue;
             }
 
+            // Проверка на длину номера
             if (inputPhone.replaceAll("[^0-9]", "").length() != 11) {
                 System.out.println("Некорректная длина номера!");
                 continue;
-            } // Проверка на длину номера
+            }
 
             phone = "+7" + inputPhone.replaceAll("[^0-9]", "").substring(1);
 
@@ -275,12 +292,13 @@ public class AddMenu {
 
         } while (!isPhoneCorrect);
 
-        System.out.println("\nТЕЛЕФОН СОТРУДНИКА: " + phone); // Проверка, можно удалить
+        System.out.println("\nТЕЛЕФОН СОТРУДНИКА: " + phone);
 
         return phone;
 
-    } // Полный ввод телефона
+    }
 
+    // Ввод даты найма
     public static String enterEmploymentDate() {
 
         System.out.println(); // Косметический отступ
@@ -293,9 +311,10 @@ public class AddMenu {
 
             LocalDate employmentDate = inputDate("дату найма");
 
+            // Строка для отмены операции
             if (employmentDate.isEqual(LocalDate.of(1, 1, 1))) {
                 return "cancel";
-            } // Сопровождающая строка для отмены операции
+            }
 
             // Границы года вводятся вручную! После 100 обычно не работают
             if (employmentDate.isBefore(LocalDate.now().minusYears(100))) {
@@ -311,19 +330,20 @@ public class AddMenu {
 
         } while (!isEmploymentDateCorrect);
 
-        System.out.println("\nДАТА НАЙМА СОТРУДНИКА: " + employment); // Проверка, можно удалить
+        System.out.println("\nДАТА НАЙМА СОТРУДНИКА: " + employment);
 
         return employment;
 
-    } // Ввод даты найма
+    }
 
+    // Ввод зарплаты
     public static int enterSalary() {
 
         System.out.println(); // Косметический отступ
 
-        boolean isSalaryCorrect = false; // Проверка на правильность введённой зарплаты
+        boolean isSalaryCorrect = false;
 
-        int salary = 0; // Зарплата
+        int salary = 0;
 
         do {
             System.out.print("Введите зарплату сотрудника: ");
@@ -332,18 +352,20 @@ public class AddMenu {
             if (salaryInput.equals("")) {
                 System.out.println("Строка ввода пустая!");
                 continue;
-            } // При пустой строке
+            }
 
+            // Проверка длины строки, чтобы обойти NumberFormatException при парсинге строки в Integer
             if (salaryInput.length() > 9) {
                 System.out.println("Некорректный ввод!");
                 continue;
-            } // Чтобы обойти NumberFormatException
+            }
 
             if (salaryInput.equals("отмена")) {
                 return -1;
             }
 
-            isSalaryCorrect = Checks.correctNumber(salaryInput); // Проверка на правильность ввода
+            // Проверка на правильность ввода
+            isSalaryCorrect = Checks.correctNumber(salaryInput);
 
             if (!isSalaryCorrect) {
                 continue;
@@ -354,12 +376,13 @@ public class AddMenu {
 
         } while (!isSalaryCorrect);
 
-        System.out.println("\nЗАРПЛАТА СОТРУДНИКА: " + salary + " РУБЛЕЙ."); // Проверка, можно удалить
+        System.out.println("\nЗАРПЛАТА СОТРУДНИКА: " + salary + " РУБЛЕЙ.");
 
         return salary;
 
-    } // Ввод зарплаты
+    }
 
+    // Общий метод для ввода дат (рождения и найма)
     public static LocalDate inputDate(String type) {
 
         LocalDate date = null;
@@ -376,9 +399,10 @@ public class AddMenu {
                 continue;
             }
 
+            // Строка для отмены операции
             if (input.equals("отмена")) {
                 return LocalDate.of(1, 1, 1);
-            } // Сопровождающая строка для отмены операции
+            }
 
             if (!Checks.correctDate(input)) {
                 continue;
@@ -415,9 +439,10 @@ public class AddMenu {
 
     }
 
+    // Общий метод для ввода ФИО сотрудника
     public static String inputNameSurnamePatronymic(String type) {
 
-        String input; // Строка ввода
+        String input;
         boolean isInputCorrect = false;
 
         do {
@@ -428,17 +453,17 @@ public class AddMenu {
                 System.out.print("Введите " + type + " сотрудника: ");
             }
 
-            input = Main.sc.nextLine().toLowerCase(); // Ввод имени
+            input = Main.sc.nextLine().toLowerCase();
 
             if (input.equals("")) {
                 System.out.println("Строка ввода пустая!");
                 continue;
-            } // Для повторного запуска цикла
+            }
 
+            // Строка для отмены операции
             if (input.equals("отмена")) {
                 return "cancel";
-            } // Для отмены операции
-
+            }
 
             isInputCorrect = Checks.correctName(input);
             if (!isInputCorrect) {
@@ -453,8 +478,8 @@ public class AddMenu {
                 }
             }
 
-        } while (!isInputCorrect); // Ввод имени сотрудника
+        } while (!isInputCorrect);
         return input;
-    } // Общий метод для ввода ФИО
+    }
 
 }

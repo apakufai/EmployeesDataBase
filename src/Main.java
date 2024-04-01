@@ -1,3 +1,5 @@
+// ЗАДАНИЕ
+
 /*
   TODO: Создать приложение «Система учета сотрудников».
         Основная задача проекта: хранить информацию о сотрудниках организации и
@@ -19,7 +21,7 @@
         Интерфейс приложения должен позволять выводить результат работы отчета
         в консоль или файл. Необходимо предусмотреть возможность входа по логину и
         паролю.
-    */ // ЗАДАНИЕ
+    */
 
 import java.util.Scanner;
 
@@ -57,8 +59,10 @@ public class Main {
         String password;
         boolean correctPassword = false;
 
+        // Счётчик попыток ввода пароля
+        int numberOfPasswordAttempts = 3;
+
         // Блок проверки пароля к выбранному аккаунту
-        int numberOfPasswordAttempts = 3; // Счётчик попыток ввода пароля
         do {
             System.out.print("\nВведите пароль: ");
             password = sc.nextLine();
@@ -91,8 +95,10 @@ public class Main {
 
         } while (!correctPassword);
 
+        // Добавление сотрудников из файла "Employees (reserve).txt"
+        Employee.addEmployees();
+
         // Блок работы с программой
-        Employee.addEmployees(); // Добавление сотрудников из файла "Employees (reserve).txt"
         System.out.println("\nДля добавления нового сотрудника введите \"Новый\"");
         System.out.println("Для поиска сотрудника введите \"Найти\"");
         System.out.println("Для изменения данных сотрудника введите \"Изменить\"");
@@ -106,46 +112,57 @@ public class Main {
         String operation;
         do {
             System.out.print("\nВведите операцию: ");
-            operation = sc.nextLine().toLowerCase(); // Ввод нужной операции
+
+            // Ввод нужной операции
+            operation = sc.nextLine().toLowerCase();
 
             switch (operation) {
 
-                case ("новый") -> Employee.newEmployee(); // Добавление нового сотрудника
+                // Добавление нового сотрудника
+                case ("новый") -> Employee.newEmployee();
 
-                case ("найти") -> Employee.findAndPrintEmployee(); // Поиск сотрудника по определённым данным
+                // Поиск сотрудника по определённым данным
+                case ("найти") -> Employee.findAndPrintEmployee();
 
-                case ("изменить") -> Employee.changeEmployee(); // Изменение данных сотрудника по id
+                // Изменение данных сотрудника по id
+                case ("изменить") -> Employee.changeEmployee();
 
-                case ("удалить") -> Employee.removeEmployee(); // Удаление сотрудника по id
+                // Удаление сотрудника по id
+                case ("удалить") -> Employee.removeEmployee();
 
-                case ("сохранить") -> Employee.saveChangesInFile(); // Сохранение изменений и перезапись файла
+                // Сохранение изменений и перезапись файла
+                case ("сохранить") -> Employee.saveChangesInFile();
 
-                case ("фирма") -> Employee.printCompanyReport(); // Вывод определённых данных о компании
+                // Вывод определённых данных о компании
+                case ("фирма") -> Employee.printCompanyReport();
 
+                // Вывод поисковой информации о сотрудниках
                 case ("вывод простой") -> {
                     System.out.println();
                     for (Employee e : Employee.employees) {
                         e.printInfoSimple();
                     }
-                } // Вывод поисковой информации о сотрудниках
+                }
 
+                // Вывод полной информации о сотрудниках
                 case ("вывод полный") -> {
                     for (Employee e : Employee.employees) {
                         System.out.println();
                         e.printInfoAll();
                     }
-                } // Вывод полной информации о сотрудниках
+                }
 
+                // Выход из программы
                 case ("выход") -> {
                     System.out.println("\nВыход из программы");
-                } // Выход из программы
+                }
 
                 default -> System.out.println("\nНекорректная операция! Попробуйте снова");
             }
 
         } while (!operation.equals("выход"));
 
-        sc.close(); // Закрытие сканера
+        sc.close();
 
     }
 }
